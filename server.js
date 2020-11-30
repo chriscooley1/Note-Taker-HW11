@@ -1,24 +1,15 @@
 const express = require("express");
-const path = require("path");
-const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extend: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static ("public"));
+app.use(express.static("public"));
 
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+require("./routes/apiRoutes.js")(app);
+require("./routes/htmlRoutes.js")(app);
 
-app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
-});
-
-require("/routes/apiRoutes.js")(app);
-
-app.listen(PORT, function () {
+app.listen(PORT, function (){
     console.log("App listening on PORT " + PORT);
 });
