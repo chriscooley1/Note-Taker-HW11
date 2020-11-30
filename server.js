@@ -17,9 +17,7 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-
-
-
+require("/routes/apiRoutes.js")(app);
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
