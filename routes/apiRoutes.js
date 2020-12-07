@@ -1,6 +1,8 @@
 const fs = require("fs");
+const util = require("util");
 var notesData = require("../db/db.json");
 const { v4:uuidv4 } = require("uuid");
+const writeFileAsync = util.promisify(fs.writeFile);
 
 module.exports = function(app){
     app.get("/api/notes", function(req, res){
@@ -20,12 +22,11 @@ module.exports = function(app){
 
     app.delete("/api/notes/:id", function(req, res){
         const filteredNotes = notesData.filter(note => note.id !== req.params.id);
-        fs.writeFile("db/db.json", JSON.stringify(filteredNotes), function(err, log){
-            if (err){
-                throw err
-            } else {
-                res.json(true)
-            }
-        })
+        console.log(filteredNotes)
+        writeFileAsync("db/db.json", JSON.stringify(filteredNotes)).then(()=>
+        res.json({
+            ok:true
+        }))
+        .catch(err => res.status(500).json(err))
     });
 };
